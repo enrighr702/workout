@@ -15,49 +15,62 @@
         <div class="timer" id="timerDisplay">00:00</div>
     </div>
 
-    <!-- WORKOUT NAME -->
-    <div class="card">
-        <div class="card-title">Workout Type</div>
-        <div class="ex-chips" id="workoutNameChips">
-            <button class="chip" onclick="setWorkoutName('Upper', this)">Upper</button>
-            <button class="chip" onclick="setWorkoutName('Lower', this)">Lower</button>
-            <button class="chip" onclick="setWorkoutName('Full Body Rehab', this)">Full Body Rehab</button>
-        </div>
-        <input type="text" id="workoutName" placeholder="Or type a custom name…" />
-    </div>
-
-    <!-- EXERCISE -->
-    <div class="card">
-        <div class="card-title">Exercise</div>
-        <div class="ex-chips" id="exerciseChips">
-            <div style="font-size:12px;color:var(--muted);padding:4px 0">Select a workout type above to see exercises</div>
-        </div>
-        <input type="text" id="exerciseName" placeholder="Or type a custom exercise…" />
-    </div>
-
-    <!-- SETS -->
-    <div class="card">
-        <div class="card-title">Sets</div>
-        <div class="sets-header">
-            <span>Set</span><span>kg</span><span>Reps</span><span></span>
-        </div>
-        <div id="setsContainer"></div>
-        <button class="btn btn-ghost" style="margin-top:6px" onclick="addSet()">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px;height:18px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-            Add Set
+    <!-- START WORKOUT -->
+    <div id="startWorkoutWrap" style="margin-bottom:14px">
+        <button class="btn btn-primary" onclick="startWorkout()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px;height:18px"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653Z"/></svg>
+            Start Workout
         </button>
     </div>
 
-    <!-- NOTES -->
-    <div class="card">
-        <div class="card-title">Notes (optional)</div>
-        <input type="text" id="exerciseNotes" placeholder="" />
-    </div>
+    <!-- LOGGING FORM (hidden until workout started) -->
+    <div id="workoutForm" style="display:none">
 
-    <button class="btn btn-ghost" onclick="addExerciseToWorkout()" style="margin-bottom:10px">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px;height:18px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
-        Add Exercise
-    </button>
+        <!-- WORKOUT NAME -->
+        <div class="card">
+            <div class="card-title">Workout Type</div>
+            <div class="ex-chips" id="workoutNameChips">
+                <button class="chip" onclick="setWorkoutName('Upper', this)">Upper</button>
+                <button class="chip" onclick="setWorkoutName('Lower', this)">Lower</button>
+                <button class="chip" onclick="setWorkoutName('Full Body Rehab', this)">Full Body Rehab</button>
+            </div>
+            <input type="text" id="workoutName" placeholder="Or type a custom name…" />
+        </div>
+
+        <!-- EXERCISE -->
+        <div class="card">
+            <div class="card-title">Exercise</div>
+            <div class="ex-chips" id="exerciseChips">
+                <div style="font-size:12px;color:var(--muted);padding:4px 0">Select a workout type above to see exercises</div>
+            </div>
+            <input type="text" id="exerciseName" placeholder="Or type a custom exercise…" />
+        </div>
+
+        <!-- SETS -->
+        <div class="card">
+            <div class="card-title">Sets</div>
+            <div class="sets-header">
+                <span>Set</span><span>kg</span><span>Reps</span><span></span>
+            </div>
+            <div id="setsContainer"></div>
+            <button class="btn btn-ghost" style="margin-top:6px" onclick="addSet()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px;height:18px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+                Add Set
+            </button>
+        </div>
+
+        <!-- NOTES -->
+        <div class="card">
+            <div class="card-title">Notes (optional)</div>
+            <input type="text" id="exerciseNotes" placeholder="" />
+        </div>
+
+        <button class="btn btn-ghost" onclick="addExerciseToWorkout()" style="margin-bottom:10px">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:18px;height:18px"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/></svg>
+            Add Exercise
+        </button>
+
+    </div><!-- /workoutForm -->
 
     <div id="currentWorkoutPreview"></div>
 
@@ -120,6 +133,12 @@
     </div>
 </div>
 
+<!-- PAGE: LIBRARY -->
+<div class="page" id="page-library">
+    <div class="section-title">Exercise Library</div>
+    <div id="libraryContent"></div>
+</div>
+
 {% endblock %}
 
 {% block extra_js %}
@@ -143,7 +162,7 @@ const EXERCISES = {
     ],
     'Full Body Rehab': [
         'Back Extension','Bird Dog','Dead Bug','Hip Abduction','Plank',
-        'Hip Thrust', 'Hip Hinge','Banded Walks'
+        'Hip Thrust','Hip Hinge','Banded Walks'
     ]
 };
 
@@ -154,6 +173,21 @@ document.getElementById('headerDate').textContent =
 addSet(); addSet(); addSet();
 renderHistory();
 renderAllTimeStats();
+
+// ── START WORKOUT ──────────────────────────────────────────
+function startWorkout() {
+    document.getElementById('startWorkoutWrap').style.display = 'none';
+    document.getElementById('workoutForm').style.display = 'block';
+    if (timerInterval) return;
+    currentSession.startTime = Date.now();
+    document.getElementById('activeBanner').classList.add('visible');
+    timerInterval = setInterval(() => {
+        const s = Math.floor((Date.now() - currentSession.startTime) / 1000);
+        const m = Math.floor(s / 60).toString().padStart(2,'0');
+        const sec = (s % 60).toString().padStart(2,'0');
+        document.getElementById('timerDisplay').textContent = m + ':' + sec;
+    }, 1000);
+}
 
 // WORKOUT NAME + EXERCISE CHIPS
 function setWorkoutName(name, btn) {
@@ -188,19 +222,7 @@ function navTo(page, btn) {
     btn.classList.add('active');
     if (page === 'progress') renderProgressPage();
     if (page === 'calendar') renderCalendar();
-}
-
-// TIMER
-function startTimer() {
-    if (timerInterval) return;
-    currentSession.startTime = Date.now();
-    document.getElementById('activeBanner').classList.add('visible');
-    timerInterval = setInterval(() => {
-        const s = Math.floor((Date.now() - currentSession.startTime) / 1000);
-        const m = Math.floor(s / 60).toString().padStart(2,'0');
-        const sec = (s % 60).toString().padStart(2,'0');
-        document.getElementById('timerDisplay').textContent = m + ':' + sec;
-    }, 1000);
+    if (page === 'library') renderLibrary();
 }
 
 // SETS
@@ -240,7 +262,6 @@ function addExerciseToWorkout() {
     if (!sets.length) { showToast('⚠️ Log at least one set'); return; }
     const notes = document.getElementById('exerciseNotes').value.trim();
     currentSession.exercises.push({ name, sets, notes });
-    startTimer();
     document.getElementById('exerciseName').value = '';
     document.getElementById('exerciseNotes').value = '';
     document.querySelectorAll('#exerciseChips .chip').forEach(c => c.classList.remove('selected'));
@@ -296,18 +317,27 @@ function finishWorkout() {
     };
     workouts.unshift(workout);
     localStorage.setItem('lift_workouts', JSON.stringify(workouts));
+
+    // reset timer
     clearInterval(timerInterval); timerInterval = null;
     document.getElementById('activeBanner').classList.remove('visible');
     document.getElementById('timerDisplay').textContent = '00:00';
+
+    // reset form
     document.getElementById('workoutName').value = '';
     document.querySelectorAll('#workoutNameChips .chip').forEach(c => c.classList.remove('selected'));
     document.getElementById('exerciseChips').innerHTML =
         '<div style="font-size:12px;color:var(--muted);padding:4px 0">Select a workout type above to see exercises</div>';
+    document.getElementById('setsContainer').innerHTML = '';
+    addSet(); addSet(); addSet();
+
+    // hide form, show start button again
+    document.getElementById('workoutForm').style.display = 'none';
+    document.getElementById('startWorkoutWrap').style.display = 'block';
+
     currentSession = { exercises: [], startTime: null };
     document.getElementById('currentWorkoutPreview').innerHTML = '';
     document.getElementById('finishBtn').style.display = 'none';
-    document.getElementById('setsContainer').innerHTML = '';
-    addSet(); addSet(); addSet();
     renderHistory();
     renderAllTimeStats();
     showToast('🎉 Workout saved!');
@@ -406,13 +436,10 @@ function renderCalendar() {
     const year = calDate.getFullYear();
     const month = calDate.getMonth();
     const today = new Date();
-
     document.getElementById('calMonth').textContent =
         new Date(year, month).toLocaleDateString('en-IE', { month: 'long', year: 'numeric' });
-
     document.getElementById('calDayLabels').innerHTML =
         ['Mo','Tu','We','Th','Fr','Sa','Su'].map(d => `<div class="cal-day-label">${d}</div>`).join('');
-
     const workoutMap = {};
     workouts.forEach(w => {
         const d = new Date(w.date);
@@ -422,11 +449,9 @@ function renderCalendar() {
             workoutMap[key].push(w);
         }
     });
-
     const firstDay = new Date(year, month, 1).getDay();
     const offset = firstDay === 0 ? 6 : firstDay - 1;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-
     let html = '';
     for (let i = 0; i < offset; i++) html += `<div class="cal-empty"></div>`;
     for (let d = 1; d <= daysInMonth; d++) {
@@ -436,7 +461,6 @@ function renderCalendar() {
         const onclick = hasWorkout ? `onclick="showDayWorkouts(${d}, ${month}, ${year})"` : '';
         html += `<div class="${classes}" ${onclick}>${d}${hasWorkout ? '<div class="cal-dot"></div>' : ''}</div>`;
     }
-
     document.getElementById('calGrid').innerHTML = html;
     document.getElementById('calDayWorkouts').innerHTML = '';
 }
@@ -545,6 +569,32 @@ function renderAllTimeStats() {
         <div class="stat-box"><div class="stat-val">${workouts.length}</div><div class="stat-lbl">Workouts</div></div>
         <div class="stat-box"><div class="stat-val">${totalSets}</div><div class="stat-lbl">Sets</div></div>
         <div class="stat-box"><div class="stat-val green">${(totalVol/1000).toFixed(1)}t</div><div class="stat-lbl">Volume</div></div>`;
+}
+
+// ── LIBRARY ────────────────────────────────────────────────
+function renderLibrary() {
+    const el = document.getElementById('libraryContent');
+    el.innerHTML = Object.entries(EXERCISES).map(([category, exercises]) => {
+        const rows = exercises.map(ex => {
+            const allSets = workouts.flatMap(w =>
+                w.exercises.filter(e => e.name === ex).flatMap(e => e.sets)
+            );
+            const sessionCount = workouts.filter(w => w.exercises.some(e => e.name === ex)).length;
+            const maxW = allSets.length ? Math.max(...allSets.map(s => s.weight)) : null;
+            const metaStr = sessionCount > 0
+                ? `${sessionCount} session${sessionCount > 1 ? 's' : ''} · Best: ${maxW}kg`
+                : 'Not yet logged';
+            return `<div class="lib-exercise-row">
+                <div>
+                    <div class="lib-ex-name">${ex}</div>
+                    <div class="lib-ex-meta">${metaStr}</div>
+                </div>
+                ${maxW !== null ? `<div class="lib-ex-pr">${maxW}kg</div>` : ''}
+            </div>`;
+        }).join('');
+
+        return `<div class="lib-category-label">${category}</div>${rows}`;
+    }).join('');
 }
 
 function showToast(msg) {

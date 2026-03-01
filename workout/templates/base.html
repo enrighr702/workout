@@ -252,6 +252,25 @@
         .cal-day-workouts { margin-top: 14px; }
         .cal-selected-date { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.8px; }
 
+        /* LIBRARY */
+        .lib-exercise-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 11px 14px;
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: var(--radius-sm); margin-bottom: 8px;
+            transition: border-color 0.2s;
+        }
+        .lib-exercise-row:last-child { margin-bottom: 0; }
+        .lib-ex-name { font-size: 14px; font-weight: 600; }
+        .lib-ex-meta { font-size: 11px; color: var(--muted); margin-top: 3px; }
+        .lib-ex-pr { font-size: 13px; font-weight: 700; color: var(--accent2); white-space: nowrap; }
+        .lib-category-label {
+            font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+            text-transform: uppercase; color: var(--muted);
+            margin: 18px 0 10px; padding-left: 2px;
+        }
+        .lib-category-label:first-child { margin-top: 0; }
+
         /* MISC */
         .section-title { font-size: 18px; font-weight: 800; margin-bottom: 14px; letter-spacing: -0.3px; }
         .divider { height: 1px; background: var(--border); margin: 16px 0; }
@@ -289,6 +308,10 @@
     <button class="nav-btn" onclick="navTo('progress', this)">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941"/></svg>
         Progress
+    </button>
+    <button class="nav-btn" onclick="navTo('library', this)">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.966 8.966 0 00-6 2.292m0-14.25v14.25"/></svg>
+        Library
     </button>
 </nav>
 
